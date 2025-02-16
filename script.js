@@ -10,6 +10,12 @@ let weaknesses;
 typeForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
+    // Remove only <p> elements from strengthsContainer
+    strengthsContainer.querySelectorAll("p").forEach(p => p.remove());
+
+    // Remove only <p> elements from weaknessesContainer
+    weaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
+
     fetch('strengths.json')
         .then(response => response.json())
         .then(data => {
