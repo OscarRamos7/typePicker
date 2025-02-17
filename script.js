@@ -1,7 +1,12 @@
 const typeForm = document.getElementById("typeForm");
 const typeOne = document.getElementById("typeOne");
-const strengthsContainer = document.getElementById("strengths-container");
-const weaknessesContainer = document.getElementById("weaknesses-container");
+const aStrengthsContainer = document.getElementById("attack-strengths-container");
+const aWeaknessesContainer = document.getElementById("attack-weaknesses-container");
+const aImmunityContainer = document.getElementById("attack-immunity-container");
+const dStrengthsContainer = document.getElementById("defensive-strengths-container");
+const dWeaknessesContainer = document.getElementById("defensive-weaknesses-container");
+const dImmunityContainer = document.getElementById("defensive-immunity-container");
+
 
 const doubleTypeForm = document.getElementById("double-type-form");
 const dTypeOne = document.getElementById("double-type-one");
@@ -14,10 +19,14 @@ typeForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
     // Remove only <p> elements from strengthsContainer
-    strengthsContainer.querySelectorAll("p").forEach(p => p.remove());
+    aStrengthsContainer.querySelectorAll("p").forEach(p => p.remove());
+    aWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
+    aImmunityContainer.querySelectorAll("p").forEach(p => p.remove());
 
     // Remove only <p> elements from weaknessesContainer
-    weaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
+    dStrengthsContainer.querySelectorAll("p").forEach(p => p.remove());
+    dWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
+    dImmunityContainer.querySelectorAll("p").forEach(p => p.remove());
 
     fetch('strengths.json')
         .then(response => response.json())
@@ -25,12 +34,19 @@ typeForm.addEventListener("submit", function(e) {
             strengths = data;
             // Iterate over key-value pairs of typeOneData[typeOne.value]
             Object.entries(strengths[typeOne.value]).forEach(([key, value]) => {
+                
+                const type = document.createElement("p");
+                type.innerHTML = key;
+                
                 if (value > 1) {
-                    const type = document.createElement("p");
-
-                    type.innerHTML = key;
-                    strengthsContainer.appendChild(type);
-                };
+                    aStrengthsContainer.appendChild(type);
+                } 
+                else if (value < 1 && value > 0) {
+                    aWeaknessesContainer.appendChild(type);
+                } 
+                else if (value == 0) {
+                    aImmunityContainer.appendChild(type);
+                }
             });
         })
         .catch(error => {
@@ -42,12 +58,19 @@ typeForm.addEventListener("submit", function(e) {
         .then(data => {
             weaknesses = data;
             Object.entries(weaknesses[typeOne.value]).forEach(([key, value]) => {
-                if (value > 1) {
-                    const type = document.createElement("p");
 
-                    type.innerHTML = key;
-                    weaknessesContainer.appendChild(type);
-                };
+                const type = document.createElement("p");
+                type.innerHTML = key;
+
+                if (value < 1 && value > 0) {
+                    dStrengthsContainer.appendChild(type);
+                }
+                else if (value > 1) {
+                    dWeaknessesContainer.appendChild(type);
+                }
+                else if (value == 0) {
+                    dImmunityContainer.appendChild(type);
+                }
             });
         })
         .catch(error => {
