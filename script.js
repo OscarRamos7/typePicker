@@ -1,8 +1,11 @@
 const typeForm = document.getElementById("typeForm");
 const typeOne = document.getElementById("typeOne");
-const typeTwo = document.getElementById("typeTwo");
-const strengthsContainer = document.getElementById("strengths-container")
-const weaknessesContainer = document.getElementById("weaknesses-container")
+const strengthsContainer = document.getElementById("strengths-container");
+const weaknessesContainer = document.getElementById("weaknesses-container");
+
+const doubleTypeForm = document.getElementById("double-type-form");
+const dTypeOne = document.getElementById("double-type-one");
+const dTypeTwo = document.getElementById("double-type-two");
 
 let strengths;
 let weaknesses;
@@ -23,11 +26,11 @@ typeForm.addEventListener("submit", function(e) {
             // Iterate over key-value pairs of typeOneData[typeOne.value]
             Object.entries(strengths[typeOne.value]).forEach(([key, value]) => {
                 if (value > 1) {
-                    const type = document.createElement("p")
+                    const type = document.createElement("p");
 
-                    type.innerHTML = key
-                    strengthsContainer.appendChild(type)
-                }
+                    type.innerHTML = key;
+                    strengthsContainer.appendChild(type);
+                };
             });
         })
         .catch(error => {
@@ -40,11 +43,11 @@ typeForm.addEventListener("submit", function(e) {
             weaknesses = data;
             Object.entries(weaknesses[typeOne.value]).forEach(([key, value]) => {
                 if (value > 1) {
-                    const type = document.createElement("p")
+                    const type = document.createElement("p");
 
-                    type.innerHTML = key
-                    weaknessesContainer.appendChild(type)
-                }
+                    type.innerHTML = key;
+                    weaknessesContainer.appendChild(type);
+                };
             });
         })
         .catch(error => {
@@ -52,4 +55,4 @@ typeForm.addEventListener("submit", function(e) {
         });
 
     console.log(typeOne.value);
-})
+});
