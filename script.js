@@ -11,6 +11,11 @@ const dImmunityContainer = document.getElementById("defensive-immunity-container
 const doubleTypeForm = document.getElementById("double-type-form");
 const dTypeOne = document.getElementById("double-type-one");
 const dTypeTwo = document.getElementById("double-type-two");
+const xdStrengthsContainer2 = document.getElementById("x-defensive-strengths-container2");
+const xdWeaknessesContainer2 = document.getElementById("x-defensive-weaknesses-container2");
+const dStrengthsContainer2 = document.getElementById("defensive-strengths-container2");
+const dWeaknessesContainer2 = document.getElementById("defensive-weaknesses-container2");
+const dImmunityContainer2 = document.getElementById("defensive-immunity-container2");
 
 let strengths;
 let weaknesses;
@@ -18,13 +23,61 @@ let weaknesses;
 doubleTypeForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
+    dStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
+    dWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
+    dImmunityContainer2.querySelectorAll("p").forEach(p => p.remove());
+    xdStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
+    xdWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
+
     fetch('weaknesses.json')
         .then(response => response.json())
         .then(data => {
-            Object.entries(data[dTypeOne.value]).forEach(([key, value]) => {
-                console.log(key, value)
+            Object.entries(data[dTypeOne.value]).forEach(([key, multiplier]) => {
+
+                const type = document.createElement("p");
+                type.innerHTML = key;
+
+                if (multiplier == 0) {
+                    dImmunityContainer2.appendChild(type);
+                } 
+                else if(multiplier == 0.5) {
+                    if (data[dTypeTwo.value][key] == 0) {
+                        dImmunityContainer2.appendChild(type);
+                    }
+                    else if (data[dTypeTwo.value][key] == 0.5) {
+                        xdStrengthsContainer2.appendChild(type)
+                    }
+                    else if (data[dTypeTwo.value][key] == 1) {
+                        dStrengthsContainer2.appendChild(type)
+                    }
+                }
+                else if(multiplier == 2) {
+                    if (data[dTypeTwo.value][key] == 0) {
+                        dImmunityContainer2.appendChild(type);
+                    }
+                    else if (data[dTypeTwo.value][key] == 1) {
+                        dWeaknessesContainer2.appendChild(type);
+                    }
+                    else if (data[dTypeTwo.value][key] == 2) {
+                        xdWeaknessesContainer2.appendChild(type);
+                    }
+                }
+                else if(multiplier == 1) {
+                    if (data[dTypeTwo.value][key] == 0) {
+                        dImmunityContainer2.appendChild(type);
+                    }
+                    else if (data[dTypeTwo.value][key] == 0.5) {
+                        dStrengthsContainer2.appendChild(type);
+                    }
+                    else if (data[dTypeTwo.value][key] == 2) {
+                        dWeaknessesContainer2.appendChild(type);
+                    }
+                }
             })
         })
+        .catch(error => {
+            console.error('Error fetching JSON:', error);
+        });
 })
 
 typeForm.addEventListener("submit", function(e) {
