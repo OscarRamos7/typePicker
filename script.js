@@ -15,6 +15,18 @@ const dTypeTwo = document.getElementById("double-type-two");
 let strengths;
 let weaknesses;
 
+doubleTypeForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    fetch('weaknesses.json')
+        .then(response => response.json())
+        .then(data => {
+            Object.entries(data[dTypeOne.value]).forEach(([key, value]) => {
+                console.log(key, value)
+            })
+        })
+})
+
 typeForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
