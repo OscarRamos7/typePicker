@@ -1,3 +1,6 @@
+//add checker for all variables
+//make sure same typing cant be chosen twice
+//add checker to see how many types of pokemon have same typing as double type variables
 const typeForm = document.getElementById("typeForm");
 const typeOne = document.getElementById("typeOne");
 const aStrengthsContainer = document.getElementById("attack-strengths-container");
