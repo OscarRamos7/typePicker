@@ -1,5 +1,3 @@
-//add checker for all variables
-//make sure same typing cant be chosen twice
 //add checker to see how many types of pokemon have same typing as double type variables
 //make side function to check multiplier (pass value and an identifier variable)
 const typeForm = document.getElementById("typeForm");
@@ -24,14 +22,53 @@ const dImmunityContainer2 = document.getElementById("defensive-immunity-containe
 let strengths;
 let weaknesses;
 
+function clear(clearId) {
+    if (clearId === 2) {
+        dStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
+        dWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
+        dImmunityContainer2.querySelectorAll("p").forEach(p => p.remove());
+        xdStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
+        xdWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
+    }
+    else if (clearId === 1) {
+        aStrengthsContainer.querySelectorAll("p").forEach(p => p.remove());
+        aWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
+        aImmunityContainer.querySelectorAll("p").forEach(p => p.remove());
+        dStrengthsContainer.querySelectorAll("p").forEach(p => p.remove());
+        dWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
+        dImmunityContainer.querySelectorAll("p").forEach(p => p.remove());
+    }
+}
+
+function error(errorId) {
+    if (errorId === 1) {
+        alert("Please select two different types");
+        clear(2)
+    }
+    else if(errorId === 2) {
+        alert("Please select two types");
+        clear(2)
+    }
+    else if (errorId === 3) {
+        alert("Please select a type");
+        clear(1)
+    }
+}
+
 doubleTypeForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
-    dStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
-    dWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
-    dImmunityContainer2.querySelectorAll("p").forEach(p => p.remove());
-    xdStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
-    xdWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
+    if (dTypeOne.value === dTypeTwo.value) {
+        error(1);
+        return;
+    }
+
+    if (!dTypeOne.value || !dTypeTwo.value) {
+        error(2);
+        return;
+    }
+
+    clear(2);
 
     fetch('weaknesses.json')
         .then(response => response.json())
@@ -87,22 +124,18 @@ doubleTypeForm.addEventListener("submit", function(e) {
 typeForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
-    // Remove only <p> elements from strengthsContainer
-    aStrengthsContainer.querySelectorAll("p").forEach(p => p.remove());
-    aWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
-    aImmunityContainer.querySelectorAll("p").forEach(p => p.remove());
+    if (!typeOne.value) {
+        error(3);
+        return;
+    };
 
-    // Remove only <p> elements from weaknessesContainer
-    dStrengthsContainer.querySelectorAll("p").forEach(p => p.remove());
-    dWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
-    dImmunityContainer.querySelectorAll("p").forEach(p => p.remove());
+    clear(1);
 
     fetch('strengths.json')
         .then(response => response.json())
         .then(data => {
-            strengths = data;
             // Iterate over key-value pairs of typeOneData[typeOne.value]
-            Object.entries(strengths[typeOne.value]).forEach(([key, value]) => {
+            Object.entries(data[typeOne.value]).forEach(([key, value]) => {
                 
                 const type = document.createElement("p");
                 type.innerHTML = key;
@@ -125,8 +158,7 @@ typeForm.addEventListener("submit", function(e) {
     fetch('weaknesses.json')
         .then(response => response.json())
         .then(data => {
-            weaknesses = data;
-            Object.entries(weaknesses[typeOne.value]).forEach(([key, value]) => {
+            Object.entries(data[typeOne.value]).forEach(([key, value]) => {
 
                 const type = document.createElement("p");
                 type.innerHTML = key;
