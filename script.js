@@ -2,6 +2,7 @@
 //make side function to check multiplier (pass value and an identifier variable)
 const typeForm = document.getElementById("typeForm");
 const typeOne = document.getElementById("typeOne");
+const typeCouner = document.getElementById("type-counter");
 const aStrengthsContainer = document.getElementById("attack-strengths-container");
 const aWeaknessesContainer = document.getElementById("attack-weaknesses-container");
 const aImmunityContainer = document.getElementById("attack-immunity-container");
@@ -19,9 +20,6 @@ const dStrengthsContainer2 = document.getElementById("defensive-strengths-contai
 const dWeaknessesContainer2 = document.getElementById("defensive-weaknesses-container2");
 const dImmunityContainer2 = document.getElementById("defensive-immunity-container2");
 
-let strengths;
-let weaknesses;
-
 function clear(clearId) {
     if (clearId === 2) {
         dStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
@@ -31,6 +29,7 @@ function clear(clearId) {
         xdWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
     }
     else if (clearId === 1) {
+        typeCouner.querySelectorAll("p").forEach(p => p.remove());
         aStrengthsContainer.querySelectorAll("p").forEach(p => p.remove());
         aWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
         aImmunityContainer.querySelectorAll("p").forEach(p => p.remove());
@@ -130,6 +129,18 @@ typeForm.addEventListener("submit", function(e) {
     };
 
     clear(1);
+
+    fetch('https://pokeapi.co/api/v2/type/' + typeOne.value)
+        .then(response => response.json())
+        .then(data => {
+            const counter = document.createElement("p");
+            counter.innerHTML = data.pokemon.length;
+            typeCouner.appendChild(counter);
+        })
+        .catch(error => {
+            console.error('Error fetching JSON:', error);
+        });
+
 
     fetch('strengths.json')
         .then(response => response.json())
