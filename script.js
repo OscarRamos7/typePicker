@@ -14,14 +14,19 @@ const dImmunityContainer = document.getElementById("defensive-immunity-container
 const doubleTypeForm = document.getElementById("double-type-form");
 const dTypeOne = document.getElementById("double-type-one");
 const dTypeTwo = document.getElementById("double-type-two");
+const dTypeCounter = document.getElementById("double-type-counter")
 const xdStrengthsContainer2 = document.getElementById("x-defensive-strengths-container2");
 const xdWeaknessesContainer2 = document.getElementById("x-defensive-weaknesses-container2");
 const dStrengthsContainer2 = document.getElementById("defensive-strengths-container2");
 const dWeaknessesContainer2 = document.getElementById("defensive-weaknesses-container2");
 const dImmunityContainer2 = document.getElementById("defensive-immunity-container2");
 
+let typeArray = [];
+let doubleArray = [];
+
 function clear(clearId) {
     if (clearId === 2) {
+        dTypeCounter.querySelectorAll("p").forEach(p => p.remove());
         dStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
         dWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
         dImmunityContainer2.querySelectorAll("p").forEach(p => p.remove());
@@ -68,6 +73,24 @@ doubleTypeForm.addEventListener("submit", function(e) {
     }
 
     clear(2);
+
+    Promise.all([
+        fetch('https://pokeapi.co/api/v2/type/' + dTypeOne.value).then(res => res.json()),
+        fetch('https://pokeapi.co/api/v2/type/' + dTypeTwo.value).then(res => res.json())
+    ]).then(([data1, data2]) => {
+        let typeArray = data1.pokemon.map(monInfo => monInfo.pokemon.name);
+
+        doubleArray = data2.pokemon
+            .filter(monInfo => typeArray.includes(monInfo.pokemon.name))
+            .map(monInfo => monInfo.pokemon.name);
+
+        const counter = document.createElement("p");
+        counter.innerHTML = doubleArray.length;
+        dTypeCounter.appendChild(counter);
+        console.log(doubleArray)
+    }).catch(error => {
+        console.error('Error fetching JSON:', error);
+    });
 
     fetch('weaknesses.json')
         .then(response => response.json())
