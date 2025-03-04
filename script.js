@@ -2,7 +2,7 @@
 //make side function to check multiplier (pass value and an identifier variable)
 const typeForm = document.getElementById("typeForm");
 const typeOne = document.getElementById("typeOne");
-const typeCouner = document.getElementById("type-counter");
+const typeCounter = document.getElementById("type-counter");
 const aStrengthsContainer = document.getElementById("attack-strengths-container");
 const aWeaknessesContainer = document.getElementById("attack-weaknesses-container");
 const aImmunityContainer = document.getElementById("attack-immunity-container");
@@ -21,6 +21,8 @@ const dStrengthsContainer2 = document.getElementById("defensive-strengths-contai
 const dWeaknessesContainer2 = document.getElementById("defensive-weaknesses-container2");
 const dImmunityContainer2 = document.getElementById("defensive-immunity-container2");
 
+const dCardContainer = document.getElementById("double-card-container");
+
 let typeArray = [];
 let doubleArray = [];
 
@@ -32,9 +34,10 @@ function clear(clearId) {
         dImmunityContainer2.querySelectorAll("p").forEach(p => p.remove());
         xdStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
         xdWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
+        dCardContainer.innerHTML = "";
     }
     else if (clearId === 1) {
-        typeCouner.querySelectorAll("p").forEach(p => p.remove());
+        typeCounter.querySelectorAll("p").forEach(p => p.remove());
         aStrengthsContainer.querySelectorAll("p").forEach(p => p.remove());
         aWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
         aImmunityContainer.querySelectorAll("p").forEach(p => p.remove());
@@ -88,6 +91,35 @@ doubleTypeForm.addEventListener("submit", function(e) {
         counter.innerHTML = doubleArray.length;
         dTypeCounter.appendChild(counter);
         console.log(doubleArray)
+        doubleArray.forEach(mon => {
+            fetch('https://pokeapi.co/api/v2/pokemon/' + mon)
+            .then(res => res.json())
+            .then(monInfo => {
+                const card = document.createElement("div");
+                const name = document.createElement("h4");
+                const hp = document.createElement("p");
+                const atk = document.createElement("p");
+                const def = document.createElement("p");
+                const satk = document.createElement("p");
+                const sdef = document.createElement("p");
+                const spd = document.createElement("p");
+
+                name.innerHTML = "Name: " + monInfo.name;
+                hp.innerHTML = "Hp: " + monInfo.stats[0].base_stat;
+                atk.innerHTML = "Attack: " + monInfo.stats[1].base_stat;
+                def.innerHTML = "Defense: " + monInfo.stats[2].base_stat;
+                satk.innerHTML = "S.Attack: " + monInfo.stats[3].base_stat;
+                sdef.innerHTML = "S.Defense: " + monInfo.stats[4].base_stat;
+                spd.innerHTML = "Speed: " + monInfo.stats[5].base_stat;
+
+                card.append(name, hp, atk, def, satk, sdef, spd);
+                dCardContainer.appendChild(card);
+                console.log(monInfo.name, monInfo.types[0].type.name, monInfo.types[1].type.name)
+            })
+            .catch(error => {
+                console.error('Error fetching JSON:', error);
+            })
+        })
     }).catch(error => {
         console.error('Error fetching JSON:', error);
     });
@@ -158,7 +190,7 @@ typeForm.addEventListener("submit", function(e) {
         .then(data => {
             const counter = document.createElement("p");
             counter.innerHTML = data.pokemon.length;
-            typeCouner.appendChild(counter);
+            typeCounter.appendChild(counter);
         })
         .catch(error => {
             console.error('Error fetching JSON:', error);
