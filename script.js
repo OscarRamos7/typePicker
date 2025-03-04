@@ -1,4 +1,3 @@
-//add checker to see how many types of pokemon have same typing as double type variables
 //make side function to check multiplier (pass value and an identifier variable)
 const typeForm = document.getElementById("typeForm");
 const typeOne = document.getElementById("typeOne");
