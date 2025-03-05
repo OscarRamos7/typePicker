@@ -20,6 +20,7 @@ const dStrengthsContainer2 = document.getElementById("defensive-strengths-contai
 const dWeaknessesContainer2 = document.getElementById("defensive-weaknesses-container2");
 const dImmunityContainer2 = document.getElementById("defensive-immunity-container2");
 
+const cardContainer = document.getElementById("card-container");
 const dCardContainer = document.getElementById("double-card-container");
 
 let typeArray = [];
@@ -190,6 +191,35 @@ typeForm.addEventListener("submit", function(e) {
             const counter = document.createElement("p");
             counter.innerHTML = data.pokemon.length;
             typeCounter.appendChild(counter);
+            data.pokemon.forEach(typeData => {
+                fetch(typeData.pokemon.url)
+                    .then(res => res.json())
+                    .then(monData => {
+                        console.log(monData.name)
+                        const card = document.createElement("div");
+                        const name = document.createElement("h4");
+                        const hp = document.createElement("p");
+                        const atk = document.createElement("p");
+                        const def = document.createElement("p");
+                        const satk = document.createElement("p");
+                        const sdef = document.createElement("p");
+                        const spd = document.createElement("p");
+
+                        name.innerHTML = "Name: " + monData.name;
+                        hp.innerHTML = "Hp: " + monData.stats[0].base_stat;
+                        atk.innerHTML = "Attack: " + monData.stats[1].base_stat;
+                        def.innerHTML = "Defense: " + monData.stats[2].base_stat;
+                        satk.innerHTML = "S.Attack: " + monData.stats[3].base_stat;
+                        sdef.innerHTML = "S.Defense: " + monData.stats[4].base_stat;
+                        spd.innerHTML = "Speed: " + monData.stats[5].base_stat;
+
+                        card.append(name, hp, atk, def, satk, sdef, spd);
+                        cardContainer.appendChild(card);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching JSON:', error);
+                    });
+            })
         })
         .catch(error => {
             console.error('Error fetching JSON:', error);
