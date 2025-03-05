@@ -191,6 +191,25 @@ typeForm.addEventListener("submit", function(e) {
             const counter = document.createElement("p");
             counter.innerHTML = data.pokemon.length;
             typeCounter.appendChild(counter);
+            data.damage_relations.double_damage_from.forEach(type => {
+                dWeaknessesContainer.appendChild(type.name);
+            });
+            data.damage_relations.double_damage_to.forEach(type => {
+                aStrengthsContainer.appendChild(type.name);
+            });
+            data.damage_relations.half_damage_from.forEach(type => {
+                dStrengthsContainer.appendChild(type.name);
+            });
+            data.damage_relations.half_damage_to.forEach(type => {
+                aWeaknessesContainer.appendChild(type.name);
+            });
+            data.damage_relations.no_damage_from.forEach(type => {
+                dImmunityContainer.appendChild(type.name);
+            });
+            data.damage_relations.no_damage_to.forEach(type => {
+                aImmunityContainer.appendChild(type.name);
+            });
+            })
             data.pokemon.forEach(typeData => {
                 fetch(typeData.pokemon.url)
                     .then(res => res.json())
@@ -224,54 +243,4 @@ typeForm.addEventListener("submit", function(e) {
         .catch(error => {
             console.error('Error fetching JSON:', error);
         });
-
-
-    fetch('strengths.json')
-        .then(response => response.json())
-        .then(data => {
-            // Iterate over key-value pairs of typeOneData[typeOne.value]
-            Object.entries(data[typeOne.value]).forEach(([key, value]) => {
-                
-                const type = document.createElement("p");
-                type.innerHTML = key;
-                
-                if (value > 1) {
-                    aStrengthsContainer.appendChild(type);
-                } 
-                else if (value < 1 && value > 0) {
-                    aWeaknessesContainer.appendChild(type);
-                } 
-                else if (value == 0) {
-                    aImmunityContainer.appendChild(type);
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching JSON:', error);
-        });
-
-    fetch('weaknesses.json')
-        .then(response => response.json())
-        .then(data => {
-            Object.entries(data[typeOne.value]).forEach(([key, value]) => {
-
-                const type = document.createElement("p");
-                type.innerHTML = key;
-
-                if (value < 1 && value > 0) {
-                    dStrengthsContainer.appendChild(type);
-                }
-                else if (value > 1) {
-                    dWeaknessesContainer.appendChild(type);
-                }
-                else if (value == 0) {
-                    dImmunityContainer.appendChild(type);
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching JSON:', error);
-        });
-
     console.log(typeOne.value);
-});
