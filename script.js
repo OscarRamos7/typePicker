@@ -1,4 +1,5 @@
 //make side function to check multiplier (pass value and an identifier variable)
+//make double typing match ups based on poke api
 const typeForm = document.getElementById("typeForm");
 const typeOne = document.getElementById("typeOne");
 const typeCounter = document.getElementById("type-counter");
@@ -192,24 +193,35 @@ typeForm.addEventListener("submit", function(e) {
             counter.innerHTML = data.pokemon.length;
             typeCounter.appendChild(counter);
             data.damage_relations.double_damage_from.forEach(type => {
-                dWeaknessesContainer.appendChild(type.name);
+                const section = document.createElement("p");
+                section.innerHTML = type.name;
+                dWeaknessesContainer.appendChild(section);
             });
             data.damage_relations.double_damage_to.forEach(type => {
-                aStrengthsContainer.appendChild(type.name);
+                const section = document.createElement("p");
+                section.innerHTML = type.name;
+                aStrengthsContainer.appendChild(section);
             });
             data.damage_relations.half_damage_from.forEach(type => {
-                dStrengthsContainer.appendChild(type.name);
+                const section = document.createElement("p");
+                section.innerHTML = type.name;
+                dStrengthsContainer.appendChild(section);
             });
             data.damage_relations.half_damage_to.forEach(type => {
-                aWeaknessesContainer.appendChild(type.name);
+                const section = document.createElement("p");
+                section.innerHTML = type.name;
+                aWeaknessesContainer.appendChild(section);
             });
             data.damage_relations.no_damage_from.forEach(type => {
-                dImmunityContainer.appendChild(type.name);
+                const section = document.createElement("p");
+                section.innerHTML = type.name;
+                dImmunityContainer.appendChild(section);
             });
             data.damage_relations.no_damage_to.forEach(type => {
-                aImmunityContainer.appendChild(type.name);
+                const section = document.createElement("p");
+                section.innerHTML = type.name;
+                aImmunityContainer.appendChild(section);
             });
-            })
             data.pokemon.forEach(typeData => {
                 fetch(typeData.pokemon.url)
                     .then(res => res.json())
@@ -243,4 +255,5 @@ typeForm.addEventListener("submit", function(e) {
         .catch(error => {
             console.error('Error fetching JSON:', error);
         });
-    console.log(typeOne.value);
+    })
+    console.log(typeOne.value)
