@@ -91,7 +91,6 @@ doubleTypeForm.addEventListener("submit", function(e) {
         const counter = document.createElement("p");
         counter.innerHTML = doubleArray.length;
         dTypeCounter.appendChild(counter);
-        console.log(doubleArray)
         doubleArray.forEach(mon => {
             fetch('https://pokeapi.co/api/v2/pokemon/' + mon)
             .then(res => res.json())
@@ -115,17 +114,99 @@ doubleTypeForm.addEventListener("submit", function(e) {
 
                 card.append(name, hp, atk, def, satk, sdef, spd);
                 dCardContainer.appendChild(card);
-                console.log(monInfo.name, monInfo.types[0].type.name, monInfo.types[1].type.name)
             })
             .catch(error => {
                 console.error('Error fetching JSON:', error);
-            })
-        })
-    }).catch(error => {
+            });
+        });
+
+        ddfArray = data1.damage_relations.double_damage_from.map(type => type.name);
+        hdfArray = data1.damage_relations.half_damage_from.map(type => type.name);
+        ndfArray = data1.damage_relations.no_damage_from.map(type => type.name);
+        ddfArray2 = data2.damage_relations.double_damage_from.map(type => type.name);
+        hdfArray2 = data2.damage_relations.half_damage_from.map(type => type.name);
+        ndfArray2 = data2.damage_relations.no_damage_from.map(type => type.name);
+
+        console.log(ddfArray, ndfArray, hdfArray)
+        console.log(ddfArray2, ndfArray2, hdfArray2)
+
+        ndfArray.forEach(type => {
+            const section = document.createElement("p");
+            section.innerHTML = type;
+
+            ndfArray2 = ndfArray2.filter(t => t !== type);
+            ddfArray2 = ddfArray2.filter(t => t !== type);
+            hdfArray2 = hdfArray2.filter(t => t !== type);
+            dImmunityContainer2.appendChild(section);
+        });
+
+        ndfArray2.forEach(type => {
+            const section = document.createElement("p");
+            section.innerHTML = type;
+
+            ndfArray = ndfArray.filter(t => t !== type);
+            ddfArray = ddfArray.filter(t => t !== type);
+            hdfArray = hdfArray.filter(t => t !== type);
+            dImmunityContainer2.appendChild(section);
+        });
+
+        ddfArray.forEach(type => {
+
+            if (hdfArray2.includes(type)) {
+                return;
+            }
+
+            const section = document.createElement("p");
+            section.innerHTML = type;
+            
+            if (ddfArray2.includes(type)) {
+                xdWeaknessesContainer2.appendChild(section);
+            } else {
+                dWeaknessesContainer2.appendChild(section);
+            };
+        });
+
+        hdfArray.forEach(type => {
+
+            if (ddfArray2.includes(type)) {
+                return;
+            }
+
+            const section = document.createElement("p");
+            section.innerHTML = type;
+            
+            if (hdfArray2.includes(type)) {
+                xdStrengthsContainer2.appendChild(section);
+            } else {
+                dStrengthsContainer2.appendChild(section);
+            };
+        });
+
+        ddfArray2 = ddfArray2.filter(type => !hdfArray.includes(type) && !ddfArray.includes(type));
+
+        ddfArray2.forEach(type => {
+
+            const section = document.createElement("p");
+            section.innerHTML = type;
+
+            dWeaknessesContainer2.appendChild(section);
+        });
+
+        hdfArray2 = hdfArray2.filter(type => !ddfArray.includes(type) && !hdfArray.includes(type));
+
+        hdfArray2.forEach(type => {
+
+            const section = document.createElement("p");
+            section.innerHTML = type;
+
+            dStrengthsContainer2.appendChild(section);
+        });
+    })
+    .catch(error => {
         console.error('Error fetching JSON:', error);
     });
 
-    fetch('weaknesses.json')
+    /*fetch('weaknesses.json')
         .then(response => response.json())
         .then(data => {
             Object.entries(data[dTypeOne.value]).forEach(([key, multiplier]) => {
@@ -173,7 +254,7 @@ doubleTypeForm.addEventListener("submit", function(e) {
         })
         .catch(error => {
             console.error('Error fetching JSON:', error);
-        });
+        }); */
 })
 
 typeForm.addEventListener("submit", function(e) {
@@ -255,5 +336,4 @@ typeForm.addEventListener("submit", function(e) {
         .catch(error => {
             console.error('Error fetching JSON:', error);
         });
-    })
-    console.log(typeOne.value)
+    });
