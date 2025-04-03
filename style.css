@@ -4,6 +4,9 @@ body {
     background-position: top left;
     font-family: 'jersey 20', sans-serif;
     color: white;
+    display: flex;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 h1 {
@@ -34,5 +37,29 @@ p {
 
 #typing-container {
     border-right: medium solid #D5A100;
+    height: 100vh;
     width: 25%;
+    overflow-y: auto; /* Enables vertical scrolling */
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+    scrollbar-width: none;
+}
+
+#info-container {
+    height: 100vh;
+    width: 75%;
+}
+
+#stat-container {
+    width: 100%;
+    height: 60%;
+    border-bottom: medium solid #D5A100;
+}
+
+#card-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 40%;
+    overflow-y: hidden;
+    overflow-x: auto;
 }
