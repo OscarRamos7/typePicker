@@ -36,7 +36,7 @@ function clear(clearId) {
         dImmunityContainer2.querySelectorAll("p").forEach(p => p.remove());
         xdStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
         xdWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
-        dCardContainer.innerHTML = "";
+        cardContainer.innerHTML = "";
     }
     else if (clearId === 1) {
         typeCounter.querySelectorAll("p").forEach(p => p.remove());
@@ -46,6 +46,7 @@ function clear(clearId) {
         dStrengthsContainer.querySelectorAll("p").forEach(p => p.remove());
         dWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
         dImmunityContainer.querySelectorAll("p").forEach(p => p.remove());
+        cardContainer.innerHTML = "";
     }
 }
 
@@ -125,7 +126,7 @@ doubleTypeForm.addEventListener("submit", function(e) {
                 spd.innerHTML = "Speed: " + monInfo.stats[5].base_stat;
 
                 card.append(name, hp, atk, def, satk, sdef, spd);
-                dCardContainer.appendChild(card);
+                cardContainer.appendChild(card);
             })
             .catch(error => {
                 console.error('Error fetching JSON:', error);
