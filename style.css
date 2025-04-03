@@ -1,0 +1,38 @@
+body {
+    background: linear-gradient(rgba(0,117,190,0.77), rgba(0,117,190,0.77)), url("images/background.jpg");
+    background-size: cover;
+    background-position: top left;
+    font-family: 'jersey 20', sans-serif;
+    color: white;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 1.6rem;
+}
+
+select {
+    font-family: 'montserrat', sans-serif;
+    background-color: #D9CFA7;
+    border: none;
+    border-radius: 3px;
+}
+
+button {
+    font-family: 'montserrat', sans-serif;
+    background-color: #D5A100;
+    border: none;
+    border-radius: 3px;
+}
+
+p {
+    font-family: 'montserrat', sans-serif;
+}
+
+#typing-container {
+    border-right: medium solid #D5A100;
+    width: 25%;
+}
