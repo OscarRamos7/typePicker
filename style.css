@@ -7,6 +7,7 @@ body {
     display: flex;
     overflow-y: hidden;
     overflow-x: hidden;
+    margin: auto;
 }
 
 h1 {
@@ -42,6 +43,7 @@ p {
     overflow-y: auto; /* Enables vertical scrolling */
     overflow-x: hidden; /* Prevents horizontal scrolling */
     scrollbar-width: none;
+    padding: 10px;
 }
 
 #info-container {
@@ -58,8 +60,43 @@ p {
 #card-container {
     display: flex;
     flex-direction: row;
+    align-items: center;
     width: 100%;
     height: 40%;
     overflow-y: hidden;
     overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-left: 5px;
+}
+
+.pokemon-card {
+    width: 204px;
+    height: 264px;
+    flex-shrink: 0;
+    border: 5px solid #D5A100;
+    margin: 0px 5px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.image-holder {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 45%;
+}
+
+.stats {
+    width: 100%;
+    height: 55%;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr); /* 2 rows, each taking equal space */
+    grid-template-columns: repeat(2, 1fr); /* 3 columns, each taking equal space */
+    justify-items: center; /* Centers items horizontally */
+    align-items: center; /* Centers items vertically */
+}
+
+.stats p {
+    font-size: 14px;
 }
