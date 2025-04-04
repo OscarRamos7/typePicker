@@ -22,7 +22,6 @@ const dWeaknessesContainer2 = document.getElementById("defensive-weaknesses-cont
 const dImmunityContainer2 = document.getElementById("defensive-immunity-container2");
 
 const cardContainer = document.getElementById("card-container");
-const dCardContainer = document.getElementById("double-card-container");
 
 let typeArray = [];
 let doubleArray = [];
@@ -107,9 +106,15 @@ doubleTypeForm.addEventListener("submit", function(e) {
         doubleArray.forEach(mon => {
             fetch('https://pokeapi.co/api/v2/pokemon/' + mon)
             .then(res => res.json())
-            .then(monInfo => {
+            .then(monData => {
+                console.log(monData.name)
                 const card = document.createElement("div");
-                const name = document.createElement("h4");
+                card.className = "pokemon-card";
+                const imageHolder = document.createElement("div");
+                imageHolder.className = "image-holder";
+                const stats = document.createElement("div");
+                stats.className = "stats";
+                const image = document.createElement("img");
                 const hp = document.createElement("p");
                 const atk = document.createElement("p");
                 const def = document.createElement("p");
@@ -117,15 +122,18 @@ doubleTypeForm.addEventListener("submit", function(e) {
                 const sdef = document.createElement("p");
                 const spd = document.createElement("p");
 
-                name.innerHTML = "Name: " + monInfo.name;
-                hp.innerHTML = "Hp: " + monInfo.stats[0].base_stat;
-                atk.innerHTML = "Attack: " + monInfo.stats[1].base_stat;
-                def.innerHTML = "Defense: " + monInfo.stats[2].base_stat;
-                satk.innerHTML = "S.Attack: " + monInfo.stats[3].base_stat;
-                sdef.innerHTML = "S.Defense: " + monInfo.stats[4].base_stat;
-                spd.innerHTML = "Speed: " + monInfo.stats[5].base_stat;
+                image.src = monData.sprites.front_default;
+                image.alt = monData.name
+                hp.innerHTML = "Hp: " + monData.stats[0].base_stat;
+                atk.innerHTML = "Atk: " + monData.stats[1].base_stat;
+                def.innerHTML = "Def: " + monData.stats[2].base_stat;
+                satk.innerHTML = "SpA: " + monData.stats[3].base_stat;
+                sdef.innerHTML = "SpD: " + monData.stats[4].base_stat;
+                spd.innerHTML = "Spe: " + monData.stats[5].base_stat;
 
-                card.append(name, hp, atk, def, satk, sdef, spd);
+                stats.append(hp, atk, def, satk, sdef, spd)
+                imageHolder.append(image)
+                card.append(imageHolder, stats);
                 cardContainer.appendChild(card);
             })
             .catch(error => {
@@ -301,7 +309,12 @@ typeForm.addEventListener("submit", function(e) {
                     .then(monData => {
                         console.log(monData.name)
                         const card = document.createElement("div");
-                        const name = document.createElement("h4");
+                        card.className = "pokemon-card";
+                        const imageHolder = document.createElement("div");
+                        imageHolder.className = "image-holder";
+                        const stats = document.createElement("div");
+                        stats.className = "stats";
+                        const image = document.createElement("img");
                         const hp = document.createElement("p");
                         const atk = document.createElement("p");
                         const def = document.createElement("p");
@@ -309,15 +322,18 @@ typeForm.addEventListener("submit", function(e) {
                         const sdef = document.createElement("p");
                         const spd = document.createElement("p");
 
-                        name.innerHTML = "Name: " + monData.name;
+                        image.src = monData.sprites.front_default;
+                        image.alt = monData.name
                         hp.innerHTML = "Hp: " + monData.stats[0].base_stat;
-                        atk.innerHTML = "Attack: " + monData.stats[1].base_stat;
-                        def.innerHTML = "Defense: " + monData.stats[2].base_stat;
-                        satk.innerHTML = "S.Attack: " + monData.stats[3].base_stat;
-                        sdef.innerHTML = "S.Defense: " + monData.stats[4].base_stat;
-                        spd.innerHTML = "Speed: " + monData.stats[5].base_stat;
+                        atk.innerHTML = "Atk: " + monData.stats[1].base_stat;
+                        def.innerHTML = "Def: " + monData.stats[2].base_stat;
+                        satk.innerHTML = "SpA: " + monData.stats[3].base_stat;
+                        sdef.innerHTML = "SpD: " + monData.stats[4].base_stat;
+                        spd.innerHTML = "Spe: " + monData.stats[5].base_stat;
 
-                        card.append(name, hp, atk, def, satk, sdef, spd);
+                        stats.append(hp, atk, def, satk, sdef, spd)
+                        imageHolder.append(image)
+                        card.append(imageHolder, stats);
                         cardContainer.appendChild(card);
                     })
                     .catch(error => {
