@@ -62,7 +62,7 @@ p {
     flex-direction: row;
     align-items: center;
     width: 100%;
-    height: 40%;
+    height: 42%;
     overflow-y: hidden;
     overflow-x: auto;
     scroll-behavior: smooth;
@@ -78,16 +78,24 @@ p {
     border-radius: 5px;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .image-holder {
     display: flex;
     justify-content: center;
-    width: 100%;
+    width: 75%;
     height: 45%;
+    border: 3px solid #D5A100;
+    border-radius: 5px;
+    margin-top: 10px;
+    background: linear-gradient(rgba(185,179,179,0.70), rgba(185,179,179,0.70)), url("images/card-back.jpg");
+    background-size: cover;
+
 }
 
 .stats {
+    position: relative;
     width: 100%;
     height: 55%;
     display: grid;
@@ -95,8 +103,24 @@ p {
     grid-template-columns: repeat(2, 1fr); /* 3 columns, each taking equal space */
     justify-items: center; /* Centers items horizontally */
     align-items: center; /* Centers items vertically */
+    color: black;
+    overflow: hidden;
 }
 
 .stats p {
     font-size: 14px;
+}
+
+.type-image {
+    position: absolute; /* Allows free positioning inside .stats since its been set as reference be relative property */
+    width: 212px;
+    height: 212px;
+    top: -10px;         /* Adjust to move vertically */
+    right: -50px;       /* Adjust to move horizontally */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 2;        /* On top of other content */
+    pointer-events: none; /* Optional: so it doesn't block clicks */
+    opacity: .1;
 }
