@@ -65,6 +65,13 @@ function error(errorId) {
     }
 }
 
+function cardColorPicker(type, card, typeImage) {
+    typeImage.style.backgroundImage = `url('pokemonSymbols/${type}.png')`;
+    if (type === 'fire') {
+        card.style.backgroundColor = '#FDC49A';
+    }
+}
+
 //event listener for double typing
 doubleTypeForm.addEventListener("submit", function(e) {
     e.preventDefault();
@@ -114,6 +121,8 @@ doubleTypeForm.addEventListener("submit", function(e) {
                 imageHolder.className = "image-holder";
                 const stats = document.createElement("div");
                 stats.className = "stats";
+                const typeImage = document.createElement('div');
+                typeImage.className = "type-image"
                 const image = document.createElement("img");
                 const hp = document.createElement("p");
                 const atk = document.createElement("p");
@@ -131,10 +140,12 @@ doubleTypeForm.addEventListener("submit", function(e) {
                 sdef.innerHTML = "SpD: " + monData.stats[4].base_stat;
                 spd.innerHTML = "Spe: " + monData.stats[5].base_stat;
 
-                stats.append(hp, atk, def, satk, sdef, spd)
+                stats.append(hp, atk, def, satk, sdef, spd, typeImage)
                 imageHolder.append(image)
                 card.append(imageHolder, stats);
                 cardContainer.appendChild(card);
+
+                cardColorPicker(dTypeOne.value, card, typeImage);
             })
             .catch(error => {
                 console.error('Error fetching JSON:', error);
@@ -314,6 +325,8 @@ typeForm.addEventListener("submit", function(e) {
                         imageHolder.className = "image-holder";
                         const stats = document.createElement("div");
                         stats.className = "stats";
+                        const typeImage = document.createElement('div');
+                        typeImage.className = "type-image"
                         const image = document.createElement("img");
                         const hp = document.createElement("p");
                         const atk = document.createElement("p");
@@ -331,10 +344,12 @@ typeForm.addEventListener("submit", function(e) {
                         sdef.innerHTML = "SpD: " + monData.stats[4].base_stat;
                         spd.innerHTML = "Spe: " + monData.stats[5].base_stat;
 
-                        stats.append(hp, atk, def, satk, sdef, spd)
+                        stats.append(hp, atk, def, satk, sdef, spd, typeImage)
                         imageHolder.append(image)
                         card.append(imageHolder, stats);
                         cardContainer.appendChild(card);
+
+                        cardColorPicker(typeOne.value, card, typeImage);
                     })
                     .catch(error => {
                         console.error('Error fetching JSON:', error);
