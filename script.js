@@ -69,6 +69,40 @@ function cardColorPicker(type, card, typeImage) {
     typeImage.style.backgroundImage = `url('pokemonSymbols/${type}.png')`;
     if (type === 'fire') {
         card.style.backgroundColor = '#FDC49A';
+    } else if (type === 'poison') {
+        card.style.backgroundColor = '#BEA8BE';
+    } else if (type === 'grass') {
+        card.style.backgroundColor = '#CEF6CA';
+    } else if (type === 'water') {
+        card.style.backgroundColor = '#ACC2F5';
+    } else if (type === 'rock') {
+        card.style.backgroundColor = '#B4A871';
+    } else if (type === 'ground') {
+        card.style.backgroundColor = '#E0CB91';
+    } else if (type === 'flying') {
+        card.style.backgroundColor = '#C7B9F0';
+    } else if (type === 'electric') {
+        card.style.backgroundColor = '#E9D68B';
+    } else if (type === 'dragon') {
+        card.style.backgroundColor = '#A280F3';
+    } else if (type === 'fairy') {
+        card.style.backgroundColor = '#EACAD8';
+    } else if (type === 'dark') {
+        card.style.backgroundColor = '#A09994';
+    } else if (type === 'ghost') {
+        card.style.backgroundColor = '#7C6B98';
+    } else if (type === 'psychic') {
+        card.style.backgroundColor = '#FA789F';
+    } else if (type === 'bug') {
+        card.style.backgroundColor = '#A6B33C';
+    } else if (type === 'fighting') {
+        card.style.backgroundColor = '#BF524C';
+    } else if (type === 'normal') {
+        card.style.backgroundColor = '#CFCFC5';
+    } else if (type === 'steel') {
+        card.style.backgroundColor = '#B8B8D0';
+    } else if (type === 'ice') {
+        card.style.backgroundColor = '#98D8D8';
     }
 }
 
