@@ -25,10 +25,29 @@ const cardContainer = document.getElementById("card-container");
 
 let typeArray = [];
 let doubleArray = [];
+const typeColorCodes = {
+    fire: '#FDC49A',
+    poison: '#BEA8BE',
+    grass: '#CEF6CA',
+    water: '#ACC2F5',
+    rock: '#B4A871',
+    ground: '#E0CB91',
+    flying: '#C7B9F0',
+    electric: '#E9D68B',
+    dragon: '#A280F3',
+    fairy: '#EACAD8',
+    dark: '#A09994',
+    ghost: '#7C6B98',
+    psychic: '#FA789F',
+    bug: '#A6B33C',
+    fighting: '#BF524C',
+    normal: '#CFCFC5',
+    steel: '#B8B8D0',
+    ice: '#98D8D8',
+};
 
 //clearing function
-function clear(clearId) {
-    if (clearId === 2) {
+function clear() {
         dTypeCounter.querySelectorAll("p").forEach(p => p.remove());
         dStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
         dWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
@@ -36,8 +55,6 @@ function clear(clearId) {
         xdStrengthsContainer2.querySelectorAll("p").forEach(p => p.remove());
         xdWeaknessesContainer2.querySelectorAll("p").forEach(p => p.remove());
         cardContainer.innerHTML = "";
-    }
-    else if (clearId === 1) {
         typeCounter.querySelectorAll("p").forEach(p => p.remove());
         aStrengthsContainer.querySelectorAll("p").forEach(p => p.remove());
         aWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
@@ -46,65 +63,29 @@ function clear(clearId) {
         dWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
         dImmunityContainer.querySelectorAll("p").forEach(p => p.remove());
         cardContainer.innerHTML = "";
-    }
-}
+};
 
 //error function
 function error(errorId) {
     if (errorId === 1) {
         alert("Please select two different types");
-        clear(2)
+        clear()
     }
     else if(errorId === 2) {
         alert("Please select two types");
-        clear(2)
+        clear()
     }
     else if (errorId === 3) {
         alert("Please select a type");
-        clear(1)
+        clear()
     }
-}
+};
 
+//sets type logo and background color for cards
 function cardColorPicker(type, card, typeImage) {
     typeImage.style.backgroundImage = `url('pokemonSymbols/${type}.png')`;
-    if (type === 'fire') {
-        card.style.backgroundColor = '#FDC49A';
-    } else if (type === 'poison') {
-        card.style.backgroundColor = '#BEA8BE';
-    } else if (type === 'grass') {
-        card.style.backgroundColor = '#CEF6CA';
-    } else if (type === 'water') {
-        card.style.backgroundColor = '#ACC2F5';
-    } else if (type === 'rock') {
-        card.style.backgroundColor = '#B4A871';
-    } else if (type === 'ground') {
-        card.style.backgroundColor = '#E0CB91';
-    } else if (type === 'flying') {
-        card.style.backgroundColor = '#C7B9F0';
-    } else if (type === 'electric') {
-        card.style.backgroundColor = '#E9D68B';
-    } else if (type === 'dragon') {
-        card.style.backgroundColor = '#A280F3';
-    } else if (type === 'fairy') {
-        card.style.backgroundColor = '#EACAD8';
-    } else if (type === 'dark') {
-        card.style.backgroundColor = '#A09994';
-    } else if (type === 'ghost') {
-        card.style.backgroundColor = '#7C6B98';
-    } else if (type === 'psychic') {
-        card.style.backgroundColor = '#FA789F';
-    } else if (type === 'bug') {
-        card.style.backgroundColor = '#A6B33C';
-    } else if (type === 'fighting') {
-        card.style.backgroundColor = '#BF524C';
-    } else if (type === 'normal') {
-        card.style.backgroundColor = '#CFCFC5';
-    } else if (type === 'steel') {
-        card.style.backgroundColor = '#B8B8D0';
-    } else if (type === 'ice') {
-        card.style.backgroundColor = '#98D8D8';
-    }
-}
+    card.style.backgroundColor = typeColorCodes[type] || '#FFF'; // fallback color
+};
 
 //event listener for double typing
 doubleTypeForm.addEventListener("submit", function(e) {
@@ -123,7 +104,7 @@ doubleTypeForm.addEventListener("submit", function(e) {
     }
 
     //calls clear function to clean up previous data before displaying new
-    clear(2);
+    clear();
 
     //promise all makes sure all api data has been collected before running rest of function
     Promise.all([
@@ -167,12 +148,12 @@ doubleTypeForm.addEventListener("submit", function(e) {
 
                 image.src = monData.sprites.front_default;
                 image.alt = monData.name
-                hp.innerHTML = "Hp: " + monData.stats[0].base_stat;
-                atk.innerHTML = "Atk: " + monData.stats[1].base_stat;
-                def.innerHTML = "Def: " + monData.stats[2].base_stat;
-                satk.innerHTML = "SpA: " + monData.stats[3].base_stat;
-                sdef.innerHTML = "SpD: " + monData.stats[4].base_stat;
-                spd.innerHTML = "Spe: " + monData.stats[5].base_stat;
+                hp.innerHTML = "<b>Hp:</b> " + monData.stats[0].base_stat;
+                atk.innerHTML = "<b>Atk:</b> " + monData.stats[1].base_stat;
+                def.innerHTML = "<b>Def:</b> " + monData.stats[2].base_stat;
+                satk.innerHTML = "<b>SpA:</b> " + monData.stats[3].base_stat;
+                sdef.innerHTML = "<b>SpD:</b> " + monData.stats[4].base_stat;
+                spd.innerHTML = "<b>Spe:</b> " + monData.stats[5].base_stat;
 
                 stats.append(hp, atk, def, satk, sdef, spd, typeImage)
                 imageHolder.append(image)
@@ -293,7 +274,7 @@ doubleTypeForm.addEventListener("submit", function(e) {
     .catch(error => {
         console.error('Error fetching JSON:', error);
     });
-})
+});
 
 typeForm.addEventListener("submit", function(e) {
     e.preventDefault();
@@ -305,7 +286,7 @@ typeForm.addEventListener("submit", function(e) {
     };
 
     //clears previous data before printing new one
-    clear(1);
+    clear();
 
     fetch('https://pokeapi.co/api/v2/type/' + typeOne.value)
         .then(response => response.json())
@@ -371,12 +352,12 @@ typeForm.addEventListener("submit", function(e) {
 
                         image.src = monData.sprites.front_default;
                         image.alt = monData.name
-                        hp.innerHTML = "Hp: " + monData.stats[0].base_stat;
-                        atk.innerHTML = "Atk: " + monData.stats[1].base_stat;
-                        def.innerHTML = "Def: " + monData.stats[2].base_stat;
-                        satk.innerHTML = "SpA: " + monData.stats[3].base_stat;
-                        sdef.innerHTML = "SpD: " + monData.stats[4].base_stat;
-                        spd.innerHTML = "Spe: " + monData.stats[5].base_stat;
+                        hp.innerHTML = "<b>Hp:</b> " + monData.stats[0].base_stat;
+                        atk.innerHTML = "<b>Atk:</b> " + monData.stats[1].base_stat;
+                        def.innerHTML = "<b>Def:</b> " + monData.stats[2].base_stat;
+                        satk.innerHTML = "<b>SpA:</b> " + monData.stats[3].base_stat;
+                        sdef.innerHTML = "<b>SpD:</b> " + monData.stats[4].base_stat;
+                        spd.innerHTML = "<b>Spe:</b> " + monData.stats[5].base_stat;
 
                         stats.append(hp, atk, def, satk, sdef, spd, typeImage)
                         imageHolder.append(image)
@@ -393,4 +374,11 @@ typeForm.addEventListener("submit", function(e) {
         .catch(error => {
             console.error('Error fetching JSON:', error);
         });
+    });
+
+//creates array from html collection (getbyclassname creates html collection not array)
+//now that element is array use for each to add event listener to both buttons
+//dont call clear immediately 
+Array.from(document.getElementsByClassName("clear")).forEach(button => {
+    button.addEventListener("click", clear);
     });
