@@ -22,6 +22,10 @@ const dWeaknessesContainer2 = document.getElementById("defensive-weaknesses-cont
 const dImmunityContainer2 = document.getElementById("defensive-immunity-container2");
 
 const cardContainer = document.getElementById("card-container");
+const statContainer = document.getElementById("stat-container");
+const nameContainer = document.getElementById('name-container');
+const headerContainer = document.getElementById('header-container');
+const moves = document.getElementById('moves');
 
 let typeArray = [];
 let doubleArray = [];
@@ -63,6 +67,9 @@ function clear() {
         dWeaknessesContainer.querySelectorAll("p").forEach(p => p.remove());
         dImmunityContainer.querySelectorAll("p").forEach(p => p.remove());
         cardContainer.innerHTML = "";
+        nameContainer.innerHTML = '';
+        headerContainer.style.display = 'none';
+        moves.innerHTML = '';
 };
 
 //error function
@@ -85,6 +92,25 @@ function error(errorId) {
 function cardColorPicker(type, card, typeImage) {
     typeImage.style.backgroundImage = `url('pokemonSymbols/${type}.png')`;
     card.style.backgroundColor = typeColorCodes[type] || '#FFF'; // fallback color
+};
+
+function pokeMoveInfo(pokemonName) {
+    nameContainer.innerHTML = '';
+    headerContainer.style.display = 'flex';
+    moves.innerHTML = '';
+
+
+    fetch('https://pokeapi.co/api/v2/pokemon/' + pokemonName)
+        .then(res => res.json())
+        .then(monData => {
+            pokeName = document.createElement('h2');
+
+            pokeName.innerHTML = pokemonName;
+            nameContainer.appendChild(pokeName);
+        })
+        .catch(error => {
+            console.error('Error fetching JSON:', error);
+        });
 };
 
 //event listener for double typing
@@ -161,6 +187,9 @@ doubleTypeForm.addEventListener("submit", function(e) {
                 cardContainer.appendChild(card);
 
                 cardColorPicker(dTypeOne.value, card, typeImage);
+                card.addEventListener('click', () => {
+                    pokeMoveInfo(monData.name)
+                });
             })
             .catch(error => {
                 console.error('Error fetching JSON:', error);
@@ -365,6 +394,9 @@ typeForm.addEventListener("submit", function(e) {
                         cardContainer.appendChild(card);
 
                         cardColorPicker(typeOne.value, card, typeImage);
+                        card.addEventListener('click', () => {
+                            pokeMoveInfo(monData.name)
+                        })
                     })
                     .catch(error => {
                         console.error('Error fetching JSON:', error);
