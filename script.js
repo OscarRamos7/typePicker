@@ -107,6 +107,44 @@ function pokeMoveInfo(pokemonName) {
 
             pokeName.innerHTML = pokemonName;
             nameContainer.appendChild(pokeName);
+
+            monData.moves.forEach(move => {
+                if (move.version_group_details.at(-1).move_learn_method.name === "level-up") {
+
+                    const moveName = document.createElement('p');
+                    const level = document.createElement('p');
+
+                    moveName.innerHTML = move.move.name;
+                    level.innerHTML = move.version_group_details.at(-1).level_learned_at;
+                    
+                    fetch("https://pokeapi.co/api/v2/move/" + move.move.name)
+                    .then(res => res.json())
+                    .then(moveData => {
+
+                        const moveContainer = document.createElement('div');
+                        const power = document.createElement('p');
+                        const acc = document.createElement('p');
+                        const type = document.createElement('p');
+                        const pp = document.createElement('p');
+
+                        if (moveData.accuracy == null) {
+                            acc.innerHTML = '--';
+                        } else {
+                            acc.innerHTML = moveData.accuracy;
+                        }
+                        if (moveData.power == null) {
+                            power.innerHTML = '--';
+                        } else {
+                            power.innerHTML = moveData.power;
+                        }
+                        pp.innerHTML = moveData.pp;
+                        type.innerHTML = moveData.type.name;
+
+                        moveContainer.append(level, moveName, type, power, acc, pp);
+                        moves.appendChild(moveContainer);
+                    })
+                }
+            })
         })
         .catch(error => {
             console.error('Error fetching JSON:', error);
