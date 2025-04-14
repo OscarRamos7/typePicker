@@ -68,6 +68,9 @@ p {
     height: 60%;
     border-bottom: medium solid #D5A100;
     position: relative;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding: 0px 10px;
 }
 
 #stat-container img {
@@ -166,7 +169,7 @@ p {
 }
 
 #header-container p {
-    width: 84px;
+    width: 150px;
     height: 44px;
     background-color: #d9d9d9;
     display: flex;
@@ -174,4 +177,27 @@ p {
     justify-content: center;
     border-radius: 5px;
     color: black;
+}
+
+#moves {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#moves div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: rgba(0, 0, 0, 0.30);
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+#moves div p {
+    width: 150px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
