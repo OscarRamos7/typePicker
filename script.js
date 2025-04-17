@@ -29,6 +29,8 @@ const moves = document.getElementById('moves');
 
 let typeArray = [];
 let doubleArray = [];
+let movesArray = [];
+
 const typeColorCodes = {
     fire: '#FDC49A',
     poison: '#BEA8BE',
@@ -94,62 +96,97 @@ function cardColorPicker(type, card, typeImage) {
     card.style.backgroundColor = typeColorCodes[type] || '#FFF'; // fallback color
 };
 
+function moveSorting(movesArray) {
+
+    //sorts moves in ascending order
+    movesArray.sort((a, b) => Number(a.level) - Number(b.level));
+
+     // Clear the moves container
+     moves.innerHTML = '';
+ 
+     // Display each move
+     movesArray.forEach(move => {
+         const moveContainer = document.createElement('div');
+ 
+         const name = document.createElement('p');
+         const level = document.createElement('p');
+         const power = document.createElement('p');
+         const acc = document.createElement('p');
+         const type = document.createElement('p');
+         const pp = document.createElement('p');
+ 
+         name.innerHTML = move.name;
+         level.innerHTML = move.level;
+         power.innerHTML = move.power;
+         acc.innerHTML = move.acc;
+         type.innerHTML = move.type;
+         pp.innerHTML = move.pp;
+ 
+         moveContainer.append(name, level, power, acc, type, pp);
+         moves.appendChild(moveContainer);
+     });
+     console.log(movesArray);
+}
+
 function pokeMoveInfo(pokemonName) {
+
+    //clears name container, displays table header, clears moves container
     nameContainer.innerHTML = '';
     headerContainer.style.display = 'flex';
     moves.innerHTML = '';
 
+    //clears movesArray
+    let movesArray = [];
 
+    //uses pokemon name passed by eventListener (click on card)
     fetch('https://pokeapi.co/api/v2/pokemon/' + pokemonName)
         .then(res => res.json())
         .then(monData => {
-            pokeName = document.createElement('h2');
 
+            //creates pokemon name and appends to container
+            const pokeName = document.createElement('h2');
             pokeName.innerHTML = pokemonName;
             nameContainer.appendChild(pokeName);
 
-            monData.moves.forEach(move => {
-                if (move.version_group_details.at(-1).move_learn_method.name === "level-up") {
+            //creates an array of promises
+            //.filter loops through moves array and keeps only the level up learned moves
+            //.map loops through the array returned by .filter and attaches a promise to each move
+            const moveFetches = monData.moves
+                .filter(move => move.version_group_details.at(-1).move_learn_method.name === "level-up")
+                .map(move => {
+                    //set variables for name and level
+                    const moveName = move.move.name;
+                    const level = move.version_group_details.at(-1).level_learned_at;
 
-                    const moveName = document.createElement('p');
-                    const level = document.createElement('p');
+                    //return is necessary here because its async and if there were no return the fetch call would not be included in the .map
+                    //resulting moveFetches would contain a bunch of undefined
+                    return fetch("https://pokeapi.co/api/v2/move/" + moveName)
+                        .then(res => res.json())
+                        .then(moveData => {
+                            //this return is needed to create the object without it the promise would resolve to undefined
+                            return {
+                                name: moveName,
+                                level: level,
+                                acc: moveData.accuracy ?? '--',
+                                power: moveData.power ?? '--',
+                                pp: moveData.pp,
+                                type: moveData.type.name
+                            };
+                        });
+                });
 
-                    moveName.innerHTML = move.move.name;
-                    level.innerHTML = move.version_group_details.at(-1).level_learned_at;
-                    
-                    fetch("https://pokeapi.co/api/v2/move/" + move.move.name)
-                    .then(res => res.json())
-                    .then(moveData => {
-
-                        const moveContainer = document.createElement('div');
-                        const power = document.createElement('p');
-                        const acc = document.createElement('p');
-                        const type = document.createElement('p');
-                        const pp = document.createElement('p');
-
-                        if (moveData.accuracy == null) {
-                            acc.innerHTML = '--';
-                        } else {
-                            acc.innerHTML = moveData.accuracy;
-                        }
-                        if (moveData.power == null) {
-                            power.innerHTML = '--';
-                        } else {
-                            power.innerHTML = moveData.power;
-                        }
-                        pp.innerHTML = moveData.pp;
-                        type.innerHTML = moveData.type.name;
-
-                        moveContainer.append(level, moveName, type, power, acc, pp);
-                        moves.appendChild(moveContainer);
-                    })
-                }
-            })
+            // Wait for all move fetches to finish
+            //The return here lets pokeMoveInfo return moveFetches which we can then use in the .then as fetchedMoves
+            return Promise.all(moveFetches);
+        })
+        .then(fetchedMoves => {
+            movesArray = fetchedMoves;
+            moveSorting(movesArray);
         })
         .catch(error => {
             console.error('Error fetching JSON:', error);
         });
-};
+}
 
 //event listener for double typing
 doubleTypeForm.addEventListener("submit", function(e) {
