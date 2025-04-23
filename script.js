@@ -226,50 +226,58 @@ doubleTypeForm.addEventListener("submit", function(e) {
         dTypeCounter.appendChild(counter);
 
         //collects data from each pokemon in doubleArray and displays data
-        doubleArray.forEach(mon => {
-            fetch('https://pokeapi.co/api/v2/pokemon/' + mon)
-            .then(res => res.json())
-            .then(monData => {
-                console.log(monData.name)
+        Promise.all(
+            doubleArray.map(mon => 
+                fetch('https://pokeapi.co/api/v2/pokemon/' + mon)
+                    .then(res => res.json())
+            )
+        )   
+        .then(pokemonDataArray => {
+
+            pokemonDataArray.sort((a, b) => a.id - b.id);
+
+            pokemonDataArray.forEach(monData => {
                 const card = document.createElement("div");
                 card.className = "pokemon-card";
+            
                 const imageHolder = document.createElement("div");
                 imageHolder.className = "image-holder";
                 const stats = document.createElement("div");
                 stats.className = "stats";
                 const typeImage = document.createElement('div');
-                typeImage.className = "type-image"
+                typeImage.className = "type-image";
                 const image = document.createElement("img");
+            
                 const hp = document.createElement("p");
                 const atk = document.createElement("p");
                 const def = document.createElement("p");
                 const satk = document.createElement("p");
                 const sdef = document.createElement("p");
                 const spd = document.createElement("p");
-
+            
                 image.src = monData.sprites.front_default;
-                image.alt = monData.name
+                image.alt = monData.name;
                 hp.innerHTML = "<b>Hp:</b> " + monData.stats[0].base_stat;
                 atk.innerHTML = "<b>Atk:</b> " + monData.stats[1].base_stat;
                 def.innerHTML = "<b>Def:</b> " + monData.stats[2].base_stat;
                 satk.innerHTML = "<b>SpA:</b> " + monData.stats[3].base_stat;
                 sdef.innerHTML = "<b>SpD:</b> " + monData.stats[4].base_stat;
                 spd.innerHTML = "<b>Spe:</b> " + monData.stats[5].base_stat;
-
-                stats.append(hp, atk, def, satk, sdef, spd, typeImage)
-                imageHolder.append(image)
+            
+                stats.append(hp, atk, def, satk, sdef, spd, typeImage);
+                imageHolder.append(image);
                 card.append(imageHolder, stats);
                 cardContainer.appendChild(card);
-
+            
                 cardColorPicker(dTypeOne.value, card, typeImage);
+            
                 card.addEventListener('click', () => {
-                    pokeMoveInfo(monData.name)
-                });
+                  pokeMoveInfo(monData.name);
+                })
             })
-            .catch(error => {
-                console.error('Error fetching JSON:', error);
-            });
-        });
+        .catch(error => {
+            console.error('Error fetching JSON:', error);
+        })
 
         //damage relation arrays for both selected types(double damage, half damage, no damage)
         ddfArray = data1.damage_relations.double_damage_from.map(type => type.name);
@@ -373,7 +381,8 @@ doubleTypeForm.addEventListener("submit", function(e) {
             section.innerHTML = type;
 
             dStrengthsContainer2.appendChild(section);
-        });
+            });
+        })
     })
     .catch(error => {
         console.error('Error fetching JSON:', error);
@@ -433,20 +442,29 @@ typeForm.addEventListener("submit", function(e) {
             });
 
             //fetches data for each pokemon in list and prints stats
-            data.pokemon.forEach(typeData => {
-                fetch(typeData.pokemon.url)
-                    .then(res => res.json())
-                    .then(monData => {
-                        console.log(monData.name)
+            singleArray = [];
+
+            const fetches = data.pokemon.map(typeData => 
+                fetch(typeData.pokemon.url).then(res => res.json())
+            );
+
+            Promise.all(fetches)
+                .then(allMonData => {
+                    // Now that we have all Pokémon, sort by ID
+                    allMonData.sort((a, b) => a.id - b.id);
+
+                    allMonData.forEach(monData => {
                         const card = document.createElement("div");
                         card.className = "pokemon-card";
+
                         const imageHolder = document.createElement("div");
                         imageHolder.className = "image-holder";
                         const stats = document.createElement("div");
                         stats.className = "stats";
                         const typeImage = document.createElement('div');
-                        typeImage.className = "type-image"
+                        typeImage.className = "type-image";
                         const image = document.createElement("img");
+
                         const hp = document.createElement("p");
                         const atk = document.createElement("p");
                         const def = document.createElement("p");
@@ -455,7 +473,7 @@ typeForm.addEventListener("submit", function(e) {
                         const spd = document.createElement("p");
 
                         image.src = monData.sprites.front_default;
-                        image.alt = monData.name
+                        image.alt = monData.name;
                         hp.innerHTML = "<b>Hp:</b> " + monData.stats[0].base_stat;
                         atk.innerHTML = "<b>Atk:</b> " + monData.stats[1].base_stat;
                         def.innerHTML = "<b>Def:</b> " + monData.stats[2].base_stat;
@@ -463,25 +481,23 @@ typeForm.addEventListener("submit", function(e) {
                         sdef.innerHTML = "<b>SpD:</b> " + monData.stats[4].base_stat;
                         spd.innerHTML = "<b>Spe:</b> " + monData.stats[5].base_stat;
 
-                        stats.append(hp, atk, def, satk, sdef, spd, typeImage)
-                        imageHolder.append(image)
+                        stats.append(hp, atk, def, satk, sdef, spd, typeImage);
+                        imageHolder.append(image);
                         card.append(imageHolder, stats);
                         cardContainer.appendChild(card);
 
-                        cardColorPicker(typeOne.value, card, typeImage);
+                        cardColorPicker(dTypeOne.value, card, typeImage);
+
                         card.addEventListener('click', () => {
-                            pokeMoveInfo(monData.name)
-                        })
-                    })
-                    .catch(error => {
-                        console.error('Error fetching JSON:', error);
+                            pokeMoveInfo(monData.name);
+                        });
                     });
-            })
-        })
-        .catch(error => {
-            console.error('Error fetching JSON:', error);
+                })
+                .catch(error => {
+                    console.error('Error fetching or displaying Pokémon:', error);
+                });
+            });
         });
-    });
 
 //creates array from html collection (getbyclassname creates html collection not array)
 //now that element is array use for each to add event listener to both buttons
