@@ -212,72 +212,6 @@ doubleTypeForm.addEventListener("submit", function(e) {
         fetch('https://pokeapi.co/api/v2/type/' + dTypeOne.value).then(res => res.json()),
         fetch('https://pokeapi.co/api/v2/type/' + dTypeTwo.value).then(res => res.json())
     ]).then(([data1, data2]) => {
-        //gathers all pokemon from type one and puts their name into typeArray
-        let typeArray = data1.pokemon.map(monInfo => monInfo.pokemon.name);
-
-        //checks every pokemon of the second typing and saves only the names of the ones present in the first list
-        doubleArray = data2.pokemon
-            .filter(monInfo => typeArray.includes(monInfo.pokemon.name))
-            .map(monInfo => monInfo.pokemon.name);
-
-        //checks the length of doubleArray to display the amount of pokemon with selected typing
-        const counter = document.createElement("p");
-        counter.innerHTML = doubleArray.length;
-        dTypeCounter.appendChild(counter);
-
-        //collects data from each pokemon in doubleArray and displays data
-        Promise.all(
-            doubleArray.map(mon => 
-                fetch('https://pokeapi.co/api/v2/pokemon/' + mon)
-                    .then(res => res.json())
-            )
-        )   
-        .then(pokemonDataArray => {
-
-            pokemonDataArray.sort((a, b) => a.id - b.id);
-
-            pokemonDataArray.forEach(monData => {
-                const card = document.createElement("div");
-                card.className = "pokemon-card";
-            
-                const imageHolder = document.createElement("div");
-                imageHolder.className = "image-holder";
-                const stats = document.createElement("div");
-                stats.className = "stats";
-                const typeImage = document.createElement('div');
-                typeImage.className = "type-image";
-                const image = document.createElement("img");
-            
-                const hp = document.createElement("p");
-                const atk = document.createElement("p");
-                const def = document.createElement("p");
-                const satk = document.createElement("p");
-                const sdef = document.createElement("p");
-                const spd = document.createElement("p");
-            
-                image.src = monData.sprites.front_default;
-                image.alt = monData.name;
-                hp.innerHTML = "<b>Hp:</b> " + monData.stats[0].base_stat;
-                atk.innerHTML = "<b>Atk:</b> " + monData.stats[1].base_stat;
-                def.innerHTML = "<b>Def:</b> " + monData.stats[2].base_stat;
-                satk.innerHTML = "<b>SpA:</b> " + monData.stats[3].base_stat;
-                sdef.innerHTML = "<b>SpD:</b> " + monData.stats[4].base_stat;
-                spd.innerHTML = "<b>Spe:</b> " + monData.stats[5].base_stat;
-            
-                stats.append(hp, atk, def, satk, sdef, spd, typeImage);
-                imageHolder.append(image);
-                card.append(imageHolder, stats);
-                cardContainer.appendChild(card);
-            
-                cardColorPicker(dTypeOne.value, card, typeImage);
-            
-                card.addEventListener('click', () => {
-                  pokeMoveInfo(monData.name);
-                })
-            })
-        .catch(error => {
-            console.error('Error fetching JSON:', error);
-        })
 
         //damage relation arrays for both selected types(double damage, half damage, no damage)
         ddfArray = data1.damage_relations.double_damage_from.map(type => type.name);
@@ -382,7 +316,74 @@ doubleTypeForm.addEventListener("submit", function(e) {
 
             dStrengthsContainer2.appendChild(section);
             });
+            
+        //gathers all pokemon from type one and puts their name into typeArray
+        let typeArray = data1.pokemon.map(monInfo => monInfo.pokemon.name);
+
+        //checks every pokemon of the second typing and saves only the names of the ones present in the first list
+        doubleArray = data2.pokemon
+            .filter(monInfo => typeArray.includes(monInfo.pokemon.name))
+            .map(monInfo => monInfo.pokemon.name);
+
+        //checks the length of doubleArray to display the amount of pokemon with selected typing
+        const counter = document.createElement("p");
+        counter.innerHTML = doubleArray.length;
+        dTypeCounter.appendChild(counter);
+
+        //collects data from each pokemon in doubleArray and displays data
+        Promise.all(
+            doubleArray.map(mon => 
+                fetch('https://pokeapi.co/api/v2/pokemon/' + mon)
+                    .then(res => res.json())
+            )
+        )   
+        .then(pokemonDataArray => {
+
+            pokemonDataArray.sort((a, b) => a.id - b.id);
+
+            pokemonDataArray.forEach(monData => {
+                const card = document.createElement("div");
+                card.className = "pokemon-card";
+            
+                const imageHolder = document.createElement("div");
+                imageHolder.className = "image-holder";
+                const stats = document.createElement("div");
+                stats.className = "stats";
+                const typeImage = document.createElement('div');
+                typeImage.className = "type-image";
+                const image = document.createElement("img");
+            
+                const hp = document.createElement("p");
+                const atk = document.createElement("p");
+                const def = document.createElement("p");
+                const satk = document.createElement("p");
+                const sdef = document.createElement("p");
+                const spd = document.createElement("p");
+            
+                image.src = monData.sprites.front_default;
+                image.alt = monData.name;
+                hp.innerHTML = "<b>Hp:</b> " + monData.stats[0].base_stat;
+                atk.innerHTML = "<b>Atk:</b> " + monData.stats[1].base_stat;
+                def.innerHTML = "<b>Def:</b> " + monData.stats[2].base_stat;
+                satk.innerHTML = "<b>SpA:</b> " + monData.stats[3].base_stat;
+                sdef.innerHTML = "<b>SpD:</b> " + monData.stats[4].base_stat;
+                spd.innerHTML = "<b>Spe:</b> " + monData.stats[5].base_stat;
+            
+                stats.append(hp, atk, def, satk, sdef, spd, typeImage);
+                imageHolder.append(image);
+                card.append(imageHolder, stats);
+                cardContainer.appendChild(card);
+            
+                cardColorPicker(dTypeOne.value, card, typeImage);
+            
+                card.addEventListener('click', () => {
+                  pokeMoveInfo(monData.name);
+                })
+            })
+        .catch(error => {
+            console.error('Error fetching JSON:', error);
         })
+    })
     })
     .catch(error => {
         console.error('Error fetching JSON:', error);
@@ -486,7 +487,7 @@ typeForm.addEventListener("submit", function(e) {
                         card.append(imageHolder, stats);
                         cardContainer.appendChild(card);
 
-                        cardColorPicker(dTypeOne.value, card, typeImage);
+                        cardColorPicker(typeOne.value, card, typeImage);
 
                         card.addEventListener('click', () => {
                             pokeMoveInfo(monData.name);
