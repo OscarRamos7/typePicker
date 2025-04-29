@@ -122,7 +122,7 @@ function moveSorting(movesArray) {
          type.innerHTML = move.type;
          pp.innerHTML = move.pp;
  
-         moveContainer.append(name, level, power, acc, type, pp);
+         moveContainer.append(level, name, type, power, acc, pp);
          moves.appendChild(moveContainer);
      });
      console.log(movesArray);
